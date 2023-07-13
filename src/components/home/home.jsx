@@ -2,18 +2,78 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import TableList from "../table";
 import { getList } from "../../services/get-list";
+import { searchFilter, clearListByDeleted } from "../../helpers/common";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Label, Control, Select } = Form;
 let fullList = [];
+const schoolList = ['Gryffindor', 'Slytherin', 'Hufflepuff', 'Ravenclaw'];
 const Home = ({ classes }) => {
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isCleanList, setIsCleanList] = useState(false);
     const [selectValue, setSelectValue] = useState('');
     const [words, setWords] = useState('');
+    const [listDelated, setListDeleted] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handleSearch = (event) => {
+        const word = event.target.value;
+        setWords(word);
+        setSelectValue('');
+        setCurrentPage(1);
+        let newArray = searchFilter(word, fullList);
+        if (listDelated.length)
+            newArray = clearListByDeleted(listDelated, newArray);
+        setList([...newArray]);
+    }
+
+    const handleDeleteItem = (itemDelete) => {
+        const arrayDeleted = listDelated;
+        arrayDeleted.push(itemDelete);
+        setListDeleted(arrayDeleted);
+        const newArray = list.filter(item => item.id !== itemDelete.id);
+        setList([...newArray]);
+    }
+
+    const handleChangeSchool = (event) => {
+        const school = event.target.value;
+        setSelectValue(school);
+        setWords('');
+        setCurrentPage(1);
+        if (school) {
+            let newArray = fullList.filter(item => item.house === school);
+            if (listDelated.length)
+                newArray = clearListByDeleted(listDelated, newArray);
+            setList([...newArray]);
+        }else{
+            let newArray = fullList;
+            if (listDelated.length)
+                newArray = clearListByDeleted(listDelated, newArray);
+            setList([...newArray]);
+        }
+    }
+
+    const handleLoadList = () => {
+        getInitialList()
+        setWords('');
+        setSelectValue('');
+        setCurrentPage(1);
+    }
+
+    const handleClearList = () => {
+        setList([]);
+        setListDeleted([]);
+        setWords('');
+        setSelectValue('');
+        setIsCleanList(true);
+        setCurrentPage(1);
+    }
 
     const getInitialList = async () => {
         setLoading(true);
+        setListDeleted([]);
+        setIsCleanList(false);
         const resp = await getList();
         if (resp) {
             setTimeout(() => {
@@ -23,37 +83,6 @@ const Home = ({ classes }) => {
             }, 800);
         }
     };
-
-    const searchFilter = (input) => {
-        return Object.keys(fullList).filter(key => {
-            const nameList = fullList[key].name.toLowerCase();
-            return nameList.includes(input.toLowerCase())
-        })
-            .map(foundKey => ({ ...fullList[foundKey], key: foundKey }))
-    }
-
-    const search = (event) => {
-        const word = event.target.value;
-        setWords(word);
-        setSelectValue('');
-        const newArray = searchFilter(word);
-        setList([...newArray]);
-    }
-
-    const deleteItem = (id) => {
-        const newArray = list.filter(item => item.id !== id);
-        setList([...newArray]);
-    }
-    
-    const changeSchool = (event) => {
-        const school = event.target.value;
-        setSelectValue(school);
-        setWords('');
-        if(school){
-            const newArray = fullList.filter(item => item.house === school);
-            setList([...newArray]);
-        }
-    }
 
     useEffect(() => {
         getInitialList();
@@ -74,32 +103,35 @@ const Home = ({ classes }) => {
                                     type="text"
                                     id="inputSearch"
                                     value={words}
-                                    onChange={(event) => search(event)}
+                                    onChange={(event) => handleSearch(event)}
+                                    disabled={loading || isCleanList}
                                 />
                             </div>
                         </Col>
                         <Col xxs={12} md={3} lg={3}>
                             <div className={classes.divSelect}>
                                 <Label htmlFor="inputSelect">Escuela</Label>
-                                <Select 
-                                    aria-label="Default select example" 
+                                <Select
+                                    aria-label="Select"
                                     id="inputSelect"
-                                    onChange={changeSchool} 
+                                    onChange={handleChangeSchool}
                                     value={selectValue}
+                                    disabled={loading || isCleanList}
                                 >
                                     <option value="">Selecciona...</option>
-                                    <option value="Gryffindor">Gryffindor</option>
-                                    <option value="Slytherin">Slytherin</option>
-                                    <option value="Hufflepuff">Hufflepuff</option>
-                                    <option value="Ravenclaw">Ravenclaw</option>
+                                    {schoolList.map((item, key) => {
+                                        return (
+                                            <option value={item} key={key}>{item}</option>
+                                        )
+                                    })}
                                 </Select>
                             </div>
                         </Col>
 
                         <Col xxs={12} md={4} lg={4}>
                             <div className={classes.divButtons}>
-                                <Button className={classes.buttonCustom} onClick={() => getInitialList()}>Cargar</Button>
-                                <Button className={classes.buttonCustom} variant="danger" onClick={() => setList([])}>Limpiar</Button>
+                                <Button className={classes.buttonCustom} onClick={handleLoadList}>Cargar</Button>
+                                <Button className={classes.buttonCustom} variant="danger" onClick={handleClearList}>Limpiar</Button>
                             </div>
                         </Col>
                     </Row>
@@ -108,7 +140,9 @@ const Home = ({ classes }) => {
                     {!loading ?
                         <TableList
                             list={list}
-                            deleteItem={deleteItem}
+                            deleteItem={handleDeleteItem}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
                         />
                         :
                         <div className={classes.divLoading}>

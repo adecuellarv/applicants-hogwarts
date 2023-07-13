@@ -4,8 +4,7 @@ import Pagination from "./pagination";
 import batmanimg from './batman.png';
 
 let PageSize = 10;
-const TableList = ({ classes, list, deleteItem }) => {
-    const [currentPage, setCurrentPage] = useState(1);
+const TableList = ({ classes, list, deleteItem, currentPage, setCurrentPage }) => {
 
     const currentTableData = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * PageSize;
@@ -35,7 +34,7 @@ const TableList = ({ classes, list, deleteItem }) => {
                                 <td>{item?.species ? item?.species : 'No hay información por mostrar'}</td>
                                 <td>{item?.house ? item?.house : 'No hay información por mostrar'}</td>
                                 <td>{item?.patronus ? item?.patronus : 'No hay información por mostrar'}</td>
-                                <td><Button onClick={() => { deleteItem(item.id) }}>Quitar</Button></td>
+                                <td><Button onClick={() => { deleteItem(item) }}>Quitar</Button></td>
                             </tr>
                         );
                     })}

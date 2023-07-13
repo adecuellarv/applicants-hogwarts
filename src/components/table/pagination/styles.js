@@ -20,27 +20,9 @@ export default {
         "&.dots:hover": { backgroundColor: "transparent", cursor: "default" },
         "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)", cursor: "pointer" },
         "&.selected": { backgroundColor: "rgba(0, 0, 0, 0.08)" },
-        ".arrow": {
-            "&::before": {
-                position: "relative",
-                content: "''",
-                display: "inline-block",
-                width: "0.4em",
-                height: "0.4em",
-                borderRight: "0.12em solid rgba(0, 0, 0, 0.87)",
-                borderTop: "0.12em solid rgba(0, 0, 0, 0.87)"
-            },
-            "&.left": { transform: "rotate(-135deg) translate(-50%)" },
-            "&.right": { transform: "rotate(45deg)" }
-        },
-        "&.disabled": {
-            pointerEvents: "none",
-            ".arrow::before": {
-                borderRight: "0.12em solid rgba(0, 0, 0, 0.43)",
-                borderTop: "0.12em solid rgba(0, 0, 0, 0.43)"
-            },
-            "&:hover": { backgroundColor: "transparent", cursor: "default" }
-        }
+    },
+    currentPage:{
+        backgroundColor: 'rgba(0, 0, 0, 0.08)'
     }
 
 }

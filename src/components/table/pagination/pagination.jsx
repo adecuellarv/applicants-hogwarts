@@ -51,7 +51,7 @@ const Pagination = ({
 
                 return (
                     <li
-                        className={classes.paginationItem}
+                        className={`${classes.paginationItem} ${currentPage === pageNumber ? classes.currentPage : ''}`}
                         onClick={() => onPageChange(pageNumber)}
                         key={key}
                     >
