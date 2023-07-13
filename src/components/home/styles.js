@@ -12,5 +12,20 @@ export default {
     },
     divTable:{
         marginTop: 30
+    },
+    divLoading:{
+        width: '100%',
+        textAlign: 'center',
+        color: 'gray'
+    },
+    divSelect:{
+        marginTop: 0
+    },
+    divButtons: {
+        marginTop: 30
+    },
+    buttonCustom:{
+        float: 'right',
+        marginLeft: 10
     }
 }

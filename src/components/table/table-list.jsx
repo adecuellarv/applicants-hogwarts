@@ -1,16 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import Pagination from "./pagination";
+import batmanimg from './batman.png';
 
 let PageSize = 10;
-const TableList = ({ classes, list }) => {
+const TableList = ({ classes, list, deleteItem }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const currentTableData = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         return list.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
+    }, [currentPage, list]);
 
     return (
         <>
@@ -29,12 +30,12 @@ const TableList = ({ classes, list }) => {
                     {currentTableData.map(item => {
                         return (
                             <tr>
-                                <td><img className={classes.picture} src={item.image} /></td>
-                                <td>{item.name}</td>
-                                <td>{item.species}</td>
-                                <td>{item.house}</td>
-                                <td>{item.patronus}</td>
-                                <td><Button>Quitar</Button></td>
+                                <td><img className={classes.picture} src={item?.image ? item?.image : batmanimg} /></td>
+                                <td>{item?.name ? item?.name : 'No hay información por mostrar'}</td>
+                                <td>{item?.species ? item?.species : 'No hay información por mostrar'}</td>
+                                <td>{item?.house ? item?.house : 'No hay información por mostrar'}</td>
+                                <td>{item?.patronus ? item?.patronus : 'No hay información por mostrar'}</td>
+                                <td><Button onClick={() => { deleteItem(item.id) }}>Quitar</Button></td>
                             </tr>
                         );
                     })}
