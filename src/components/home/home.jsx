@@ -10,7 +10,7 @@ const Home = ({ classes }) => {
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectValue, setSelectValue] = useState('');
-    //const [words, setWords] = useState('');
+    const [words, setWords] = useState('');
 
     const getInitialList = async () => {
         setLoading(true);
@@ -34,6 +34,8 @@ const Home = ({ classes }) => {
 
     const search = (event) => {
         const word = event.target.value;
+        setWords(word);
+        setSelectValue('');
         const newArray = searchFilter(word);
         setList([...newArray]);
     }
@@ -45,7 +47,8 @@ const Home = ({ classes }) => {
     
     const changeSchool = (event) => {
         const school = event.target.value;
-        setSelectValue(school)
+        setSelectValue(school);
+        setWords('');
         if(school){
             const newArray = fullList.filter(item => item.house === school);
             setList([...newArray]);
@@ -70,6 +73,7 @@ const Home = ({ classes }) => {
                                 <Control
                                     type="text"
                                     id="inputSearch"
+                                    value={words}
                                     onChange={(event) => search(event)}
                                 />
                             </div>
