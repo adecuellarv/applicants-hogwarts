@@ -15,7 +15,7 @@ const TableList = ({ classes, list, deleteItem }) => {
 
     return (
         <>
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive>
                 <thead>
                     <tr>
                         <th>Foto</th>
