@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import TableList from "../table";
+import { getList } from "../../services/get-list";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Label, Control } = Form;
 const Home = ({ classes }) => {
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        getInitialList();
+    }, []);
+
+    const getInitialList = async () => {
+        const resp = await getList();
+        if (resp) {
+            setList(resp);
+        }
+    };
+
+
     return (
         <div>
             <div className={classes.divTitle} >
@@ -25,7 +40,9 @@ const Home = ({ classes }) => {
                     </Row>
                 </div>
                 <div className={`${classes.cardStyle} ${classes.divTable}`}>
-                    <TableList />
+                    {!!list.length &&
+                        <TableList list={list} />
+                    }
                 </div>
             </Container>
         </div>

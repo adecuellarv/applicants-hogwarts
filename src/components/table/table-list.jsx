@@ -1,38 +1,54 @@
-import React from "react";
-import { Table } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useMemo } from 'react';
+import { Table, Button } from 'react-bootstrap';
+import Pagination from "./pagination";
 
-const TableList = ({ classes }) => {
+let PageSize = 10;
+const TableList = ({ classes, list }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const currentTableData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return list.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage]);
+
     return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td colSpan={2}>Larry the Bird</td>
-                    <td>@twitter</td>
-                </tr>
-            </tbody>
-        </Table>
+        <>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Escuela</th>
+                        <th>Patronus</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentTableData.map(item => {
+                        return (
+                            <tr>
+                                <td><img className={classes.picture} src={item.image} /></td>
+                                <td>{item.name}</td>
+                                <td>{item.species}</td>
+                                <td>{item.house}</td>
+                                <td>{item.patronus}</td>
+                                <td><Button>Quitar</Button></td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </Table>
+            <div className={classes.paginationComponent}>
+                <Pagination
+                    currentPage={currentPage}
+                    totalCount={list.length}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
+                />
+            </div>
+        </>
     );
 }
 
