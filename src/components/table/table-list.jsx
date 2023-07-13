@@ -27,9 +27,9 @@ const TableList = ({ classes, list, deleteItem }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentTableData.map(item => {
+                    {currentTableData.map((item, key) => {
                         return (
-                            <tr>
+                            <tr key={key}>
                                 <td><img className={classes.picture} src={item?.image ? item?.image : batmanimg} /></td>
                                 <td>{item?.name ? item?.name : 'No hay información por mostrar'}</td>
                                 <td>{item?.species ? item?.species : 'No hay información por mostrar'}</td>

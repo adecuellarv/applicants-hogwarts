@@ -44,15 +44,16 @@ const Pagination = ({
             >
                 <div>{'<'}</div>
             </li>
-            {paginationRange.map(pageNumber => {
+            {paginationRange.map((pageNumber, key) => {
                 if (pageNumber === DOTS) {
-                    return <li>&#8230;</li>;
+                    return <li key={key}>&#8230;</li>;
                 }
 
                 return (
                     <li
                         className={classes.paginationItem}
                         onClick={() => onPageChange(pageNumber)}
+                        key={key}
                     >
                         {pageNumber}
                     </li>
