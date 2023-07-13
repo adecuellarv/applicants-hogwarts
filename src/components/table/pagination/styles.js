@@ -17,9 +17,7 @@ export default {
         lineHeight: 1.43,
         fontSize: "13px",
         minWidth: "32px",
-        "&.dots:hover": { backgroundColor: "transparent", cursor: "default" },
-        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)", cursor: "pointer" },
-        "&.selected": { backgroundColor: "rgba(0, 0, 0, 0.08)" },
+        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)", cursor: "pointer" }
     },
     currentPage:{
         backgroundColor: 'rgba(0, 0, 0, 0.08)'
